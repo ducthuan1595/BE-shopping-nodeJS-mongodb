@@ -22,8 +22,8 @@ const schema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    isAdmin: {
-      type: Boolean,
+    role: {
+      type: Number,
       required: true,
     },
     cart: {
@@ -37,7 +37,7 @@ const schema = new mongoose.Schema(
           quantity: { type: Number, required: true },
         },
       ],
-    },
+    }
   },
   {
     timestamps: true,

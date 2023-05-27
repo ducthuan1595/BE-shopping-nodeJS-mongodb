@@ -17,7 +17,7 @@ exports.addCart = async(req, res) => {
 
 exports.deleteCart = async(req, res) => {
   const productId = req.params.productId;
-  const userId = req.body.userId;
+  const userId = req.query.userId;
   if(productId && userId) {
     const data = await cartService.handleDeleteCart(productId, userId);
     if(data) {
@@ -27,3 +27,15 @@ exports.deleteCart = async(req, res) => {
     res.status(404).json({ message: 'Invalid value' });
   }
 };
+
+exports.getCart = async(req, res) => {
+  const userId = req.params.userId;
+  if(userId) {
+    const data = await cartService.handleGetCart(userId);
+    if(data) {
+      res.status(data.statusCode).json({ message: data.message, cart: data.cart });
+    }
+  }else {
+    res.status(404).json({ message: 'Invalid value' })
+  }
+}

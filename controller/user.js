@@ -1,4 +1,5 @@
 const userService = require('../services/user');
+const RefreshToken = require('../model/refreshToken');
 
 exports.signup = async(req, res) => {
   const email = req.body.email;
@@ -20,7 +21,7 @@ exports.signup = async(req, res) => {
 exports.login = async(req, res) => {
   const email = req.body.email;
   const password = req.body.password;
-
+  // console.log(req.cookies);
   if(email && password) {
     const data = await userService.handleLogin(email, password, res, req);
     if(data) {
@@ -31,10 +32,18 @@ exports.login = async(req, res) => {
   }
 }
 
-exports.logout = async (req, res) => {
+exports.logout = async(req, res) => {
   try{
-    res.clearCookie("refreshToken");
-    res.status(200).json({ message: 'ok', errCode: 0 })
+    // const token = req.headers.cookie.split(' ')[1].split('=')[1];
+    const token = req.cookies.refreshToken;
+    console.log(token);
+    const tokens = await RefreshToken.find();
+    const filterToken = tokens.filter(t => t.refreshToken[0] === token);
+    const remove = await RefreshToken.findOneAndRemove({ refreshToken: filterToken[0].refreshToken });
+    if(remove) {
+      res.clearCookie("refreshToken", { path: '/api' });
+      res.status(200).json({ message: 'ok', errCode: 0 });
+    }
   }catch(err) {
     res.status(404).json({ message: err })
   }

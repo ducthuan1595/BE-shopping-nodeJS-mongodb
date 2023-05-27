@@ -42,11 +42,28 @@ exports.handleDeleteCart = (productId, userId) => {
     try{
       const user = await User.findById(userId);
       if(user) {
-        const updateCart = user.cart.items.filter(item => item.productId.toString() !== productId.toString());
-        await User.findOneAndUpdate({ _id: userId }, { cart: updateCart });
-        if(updateCart) {
+        const updateItems = user.cart.items.filter(item => item.productId.toString() !== productId.toString());
+        user.cart.items = updateItems;
+        await user.save();
+        if(updateItems) {
           resolve({ message: 'ok', statusCode: 200 })
         }
+      }
+    }catch(err) {
+      reject(err);
+    }
+  })
+};
+
+exports.handleGetCart = (userId) => {
+  return new Promise(async(resolve, reject) => {
+    try{
+      const user = await User.findById(userId);
+      if(user) {
+        const cart = await user.populate('cart.items.productId');
+        resolve({ statusCode: 200, message: 'ok', cart: cart.cart.items })
+      }else {
+        resolve({ statusCode: 403, message: 'You is unauthorized'})
       }
     }catch(err) {
       reject(err);

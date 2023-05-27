@@ -3,6 +3,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
+const cookieParser = require('cookie-parser')
 require('dotenv').config();
 
 const route = require('./router/init');
@@ -18,6 +19,7 @@ const port = process.env.PORT_URL;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser())
 // app.use(session({
 //   secret: 'my-secret',
 //   resave: false,

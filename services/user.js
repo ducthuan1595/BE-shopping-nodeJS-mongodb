@@ -1,12 +1,12 @@
 const User = require('../model/user');
 const RefreshToken = require('../model/refreshToken');
-const createTokens = require('../support/jwt');
+const createTokens = require('../support/createToken');
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
 
-const sendMailers = require('../support/nodemailer');
+// const sendMailers = require('../support/nodemailer');
 
 
 exports.handleSignup = (email, password, name, phone) => {
@@ -28,13 +28,13 @@ exports.handleSignup = (email, password, name, phone) => {
         password: pw,
         phone: phone,
         name: name,
-        isAdmin: false,
+        role: 0, //2=admin/1=advice/0=client
       });
       const newUser = await user.save();
       if(newUser) {
-        sendMailers(email, () => {
-          console.log('Send email successfully');
-        });
+        // sendMailers(email, () => {
+        //   console.log('Send email successfully');
+        // });
         resolve({
           message: 'ok',
           statusCode: 200
@@ -66,9 +66,10 @@ exports.handleLogin = (email, password, res, req) => {
           res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: false,
+            path: '/api',
             sameSite: 'strict'
           })
-          
+          // res.removeCookie("refreshToken");
           resolve({ message: 'ok', statusCode: 200, user: data, token })
         }else {
           resolve({ message: 'Password incorrect', statusCode: 404 })
@@ -81,4 +82,6 @@ exports.handleLogin = (email, password, res, req) => {
       reject(err);
     }
   })
-}
+};
+
+

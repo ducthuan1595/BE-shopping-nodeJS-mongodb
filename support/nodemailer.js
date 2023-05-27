@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const Product = require('../model/product');
 require("dotenv").config();
 
 const transporter = nodemailer.createTransport({
@@ -12,24 +13,90 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const HTMLContent = `<div>
-  <h2>Hey, you</h2>
-  <div>You register successfully with our shop name/n</div>
-  <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLhGZ3_RgpRLSMPNEsHtALC61ytQ9yZFnqKeGfvhjOMa-vjvdW1h8Sl7LGkOFpMUBIA6g&usqp=CAU' />
-  <div><a href='http://localhost:3000'>Click</a><span>to show detail/n</span></div>
-  <hr></hr>
-  <div></div>
-  <div>/n Good day!  </div>
-  </div>`;
+const HTMLContent = (order, items) => `<html>
+<head>
+<style>
 
-const sendMailers = async (email, cb) => {
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.bold {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 10px 0;
+}
+.info {
+  margin: 5px 0;
+}
+</style>
+</head>
+<body>
+  <h2>Hi, ${order.user.name}</h2>
+  <div class='info'>Phone: ${order.user.phone}</div>
+  <div class='info'>Address: ${order.user.address}</div>
+  <table>
+  <tr>
+    <th>Product's Name</th>
+    <th>Image</th>
+    <th>Price</th>
+    <th>Quantity</th>
+    <th>Total</th>
+  </tr>
+    ${items.map(p => {
+      const item = p._doc
+      const price = item?.price
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      const amount = (item?.price * p.quantity)
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      return `
+        <tr>
+          <td>${item.name}</td>
+          <td><img style="height:100px;" src=${item.images[0]} alt=${item.name} /></td>
+          <td>${price}</td>
+          <td>${p.quantity}</td>
+          <td>${amount}</td>
+        </tr>
+      `
+    }).join('')}
+</table>
+  <div class='bold'>TOTAL: ${order.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}VND</div>
+  <div>Thank you very much for companion with us.</div>
+  <div> Good day!  </div>
+</body>
+</html>`;
+
+const sendMailers = async (order, cb) => {
   try {
+    // const order = await Order.findOne({email: email});
+    // const overOrder = await order.populate('items');
+    const product = await Product.find();
+    const arrItem = order.items;
+    let newArr = [];
+    for(let i = 0; i < arrItem.length; i++) {
+      for(let j = 0; j < product.length; j++) {
+        if (arrItem[i].productId.toString() === product[j]._id.toString()) {
+          const newProduct = {...product[j]};
+          newProduct.quantity = arrItem[i].quantity;
+          newArr.push(newProduct);
+        }
+      }
+    }
+
     const options = {
-      from: '"Shop Name", "Hi!"',
-      to: email,
-      subject: "Sign up info",
+      from: '"BOUTIQUE", "Hi!"',
+      to: order.user.email,
+      subject: `YOUR ORDER INFORMATION `,
       text: "signup",
-      html: HTMLContent,
+      html: HTMLContent(order, newArr),
     };
     const info = await transporter.sendMail(options);
     cb(info);
