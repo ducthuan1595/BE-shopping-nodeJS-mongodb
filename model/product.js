@@ -7,7 +7,7 @@ const schema = new mongoose.Schema({
   },
   images: [
     {
-      type: String,
+      type: Buffer,
       required: true
     }
   ],
@@ -24,6 +24,10 @@ const schema = new mongoose.Schema({
     required: true
   },
   price: {
+    type: Number,
+    required: true
+  },
+  count: {
     type: Number,
     required: true
   }

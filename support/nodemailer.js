@@ -39,8 +39,8 @@ table {
 </head>
 <body>
   <h2>Hi, ${order.user.name}</h2>
-  <div class='info'>Phone: ${order.user.phone}</div>
-  <div class='info'>Address: ${order.user.address}</div>
+  <div className='info'>Phone: ${order.user.phone}</div>
+  <div className='info'>Address: ${order.user.address}</div>
   <table>
   <tr>
     <th>Product's Name</th>
@@ -68,7 +68,7 @@ table {
       `
     }).join('')}
 </table>
-  <div class='bold'>TOTAL: ${order.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}VND</div>
+  <div className='bold'>TOTAL: ${order.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}VND</div>
   <div>Thank you very much for companion with us.</div>
   <div> Good day!  </div>
 </body>

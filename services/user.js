@@ -60,9 +60,6 @@ exports.handleLogin = (email, password, res, req) => {
           };
           const token = await createTokens.createToken(data);
           const refreshToken = await createTokens.createRefreshToken(data);
-          // req.session.user = data;
-          // req.session.refreshToken = refreshToken;
-          // await req.session.save();
           res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: false,
@@ -83,5 +80,20 @@ exports.handleLogin = (email, password, res, req) => {
     }
   })
 };
+
+exports.handleGetAllUser = () => {
+  return new Promise(async(resolve, reject) => {
+    try{
+      const users = await User.find().select('-password');
+      if(users) {
+        resolve({ statusCode: 200, message: 'ok', users: users })
+      }else {
+        resolve({ statusCode: 404, message: 'Not found', users: [] })
+      }
+    }catch(err) {
+      reject(err)
+    }
+  })
+}
 
 

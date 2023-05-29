@@ -43,4 +43,25 @@ exports.getDetailOrderWithUser = async(req, res) => {
   }else {
     res.status(404).json({ message: 'Invalid value' })
   }
+};
+
+exports.getAllOrder = async(req, res) => {
+  const data = await orderService.handleGetAllOrder();
+  if(data) {
+    res.status(data.statusCode).json({ message: data.message, orders: data.orders })
+  }else {
+    res.status(500).json({ message: 'Error server'})
+  }
+};
+
+exports.getDetailOrder = async(req, res) => {
+  const orderId = req.params.orderId;
+  if(orderId) {
+    const data = await orderService.handleGetDetailOrder(orderId);
+    if(data) {
+      res.status(data.statusCode).json({ message: data.message, order: data.order});
+    }
+  }else {
+    res.status(404).json({ message: 'Invalid value' });
+  }
 }

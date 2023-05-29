@@ -34,9 +34,7 @@ exports.login = async(req, res) => {
 
 exports.logout = async(req, res) => {
   try{
-    // const token = req.headers.cookie.split(' ')[1].split('=')[1];
     const token = req.cookies.refreshToken;
-    console.log(token);
     const tokens = await RefreshToken.find();
     const filterToken = tokens.filter(t => t.refreshToken[0] === token);
     const remove = await RefreshToken.findOneAndRemove({ refreshToken: filterToken[0].refreshToken });
@@ -46,5 +44,12 @@ exports.logout = async(req, res) => {
     }
   }catch(err) {
     res.status(404).json({ message: err })
+  }
+};
+
+exports.getAllUser = async (req, res) => {
+  const data = await userService.handleGetAllUser();
+  if(data) {
+    res.status(data.statusCode).json({ message: data.message, users: data.users });
   }
 }
