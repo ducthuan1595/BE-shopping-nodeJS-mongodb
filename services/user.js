@@ -58,6 +58,7 @@ exports.handleLogin = (email, password, res, req) => {
             name: user.name,
             userId: user._id
           };
+          ;
           const token = await createTokens.createToken(data);
           const refreshToken = await createTokens.createRefreshToken(data);
           res.cookie('refreshToken', refreshToken, {
@@ -67,6 +68,7 @@ exports.handleLogin = (email, password, res, req) => {
             sameSite: 'strict'
           })
           // res.removeCookie("refreshToken");
+          // console.log(data,);
           resolve({ message: 'ok', statusCode: 200, user: data, token })
         }else {
           resolve({ message: 'Password incorrect', statusCode: 404 })

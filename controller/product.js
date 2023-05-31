@@ -18,8 +18,15 @@ exports.addProduct = async(req, res) => {
   const longDesc = req.body.longDesc;
   const category = req.body.category;
   const count = req.body.count;
+  let newArr = [];//handle when only 1 image
   const images = req.files.images;
-  const files = images.map(file => file.data);
+  if(Array.isArray(images)) {
+    newArr = images;
+  }else {
+    newArr.push(images);
+  }
+  const files = newArr?.map(file => file.data);
+
   if(name && price && shortDesc && longDesc && category && count && files) {
     const value = {
       name,
@@ -48,7 +55,14 @@ exports.updateProduct = async(req, res) => {
   const category = req.body.category;
   const count = req.body.count;
   const images = req.files.images;
-  const files = images.map(file => file.data);
+  let newArr = [];//handle when only 1 image
+  if(Array.isArray(images)) {
+    newArr = images;
+  }else {
+    newArr.push(images);
+  }
+  const files = newArr?.map(file => file.data);
+
   if(productId && name && price && shortDesc && longDesc && category && count && files) {
     const value = {
       productId,

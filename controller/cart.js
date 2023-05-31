@@ -30,7 +30,7 @@ exports.deleteCart = async(req, res) => {
 
 exports.getCart = async(req, res) => {
   const userId = req.params.userId;
-  if(userId) {
+  if(userId && userId !== 'undefined') {
     const data = await cartService.handleGetCart(userId);
     if(data) {
       res.status(data.statusCode).json({ message: data.message, cart: data.cart });

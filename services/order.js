@@ -68,8 +68,8 @@ exports.handleGetOrderWithUser = (userId, limit, page) => {
               totalPage: totalPage,
               totalNumber: totalNumber,
               currPage: page,
-              lastPage: Math.ceil(totalNumber / limit) 
-            }
+              lastPage: Math.ceil(totalNumber / limit),
+            },
           });
         }
       } else {
@@ -102,31 +102,46 @@ exports.handleGetOrderDetailWithUser = (userId, orderId) => {
   });
 };
 
-exports.handleGetAllOrder = () => {
-  return new Promise(async(resolve, reject) => {
-    try{
+exports.handleGetAllOrder = (page, limit) => {
+  return new Promise(async (resolve, reject) => {
+    try {
       const orders = await Order.find();
-      if(orders) {
-        resolve({ statusCode: 200, message: 'ok', orders: orders });
-      }else {
-        resolve({ statusCode: 404, message: 'Not found' });
+      if (orders) {
+        const totalPage = Math.ceil(orders.length / limit);
+        const start = (page - 1) * limit;
+        const end = page * limit;
+        const result = orders.slice(start, end);
+        const totalNumber = orders.length;
+        resolve({
+          statusCode: 200,
+          message: "ok",
+          result : {
+            orders: result,
+            totalPage: totalPage,
+            totalNumber: totalNumber,
+            currPage: page,
+            lastPage: Math.ceil(totalNumber / limit),
+          }
+        });
+      } else {
+        resolve({ statusCode: 404, message: "Not found" });
       }
-    }catch(err) {
+    } catch (err) {
       reject(err);
     }
-  })
+  });
 };
 
 exports.handleGetDetailOrder = (orderId) => {
-  return new Promise(async(resolve, reject) => {
-    try{
-      const order =  await Order.findById(orderId).populate("items.productId");
-      
-      if(order) {
-        resolve({ statusCode: 200, message: 'ok', order: order });
+  return new Promise(async (resolve, reject) => {
+    try {
+      const order = await Order.findById(orderId).populate("items.productId");
+
+      if (order) {
+        resolve({ statusCode: 200, message: "ok", order: order });
       }
-    }catch(err) {
-      reject(err)
+    } catch (err) {
+      reject(err);
     }
-  })
-}
+  });
+};

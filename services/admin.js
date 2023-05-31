@@ -1,7 +1,8 @@
 const User = require('../model/user');
 const bcrypt = require('bcrypt');
+const createTokens = require('../support/createToken');
 
-exports.handleLogin = (email, password) => {
+exports.handleLogin = (email, password, res) => {
   return new Promise(async(resolve, reject) => {
     try{
       const user = await User.findOne({email: email});
@@ -13,8 +14,16 @@ exports.handleLogin = (email, password) => {
             email: user.email,
             userId: user._id,
             name: user.name,
-          }
-          resolve({ statusCode: 200, message: 'ok', user: result})
+          };
+          const accessToken = await createTokens.createToken(result);
+          const refreshToken = await createTokens.createRefreshToken(result);
+          res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: false,
+            path: '/api',
+            sameSite: 'strict'
+          })
+          resolve({ statusCode: 200, message: 'ok', user: result, accessToken })
         }else{
           resolve({ statusCode: 403, message: 'You are not authorized'})
         }

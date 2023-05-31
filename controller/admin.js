@@ -4,9 +4,9 @@ exports.login = async(req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   if(email && password) {
-    const data = await adminService.handleLogin(email, password);
+    const data = await adminService.handleLogin(email, password, res);
     if(data) {
-      res.status(data.statusCode).json({ message: data.message, user: data.user })
+      res.status(data.statusCode).json({ message: data.message, user: data.user, token : data.accessToken })
     }
   }else {
     res.status(404).json({ message: 'Invalid value' })

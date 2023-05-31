@@ -16,18 +16,18 @@ const init = (app) => {
 
   router.get('/api/get-all-product', productController.getAllProduct);
   router.get('/api/get-edit-product/:productId', productController.getEditProduct);
-  router.post('/api/add-product', productController.addProduct);
-  router.post('/api/update-product', productController.updateProduct);
-  router.delete('/api/delete-product/:productId', productController.deleteProduct);
+  router.post('/api/add-product', auth.authToken, productController.addProduct);
+  router.post('/api/update-product', auth.authToken, productController.updateProduct);
+  router.delete('/api/delete-product/:productId', auth.authToken, productController.deleteProduct);
 
-  router.get('/api/get-cart/:userId', cartController.getCart)
-  router.post('/api/add-cart', cartController.addCart);
-  router.delete('/api/delete-cart/:productId', cartController.deleteCart);
+  router.get('/api/get-cart/:userId', auth.authToken, cartController.getCart)
+  router.post('/api/add-cart', auth.authToken, cartController.addCart);
+  router.delete('/api/delete-cart/:productId', auth.authToken, cartController.deleteCart);
 
   router.get('/api/get-all-order', orderController.getAllOrder);
-  router.post('/api/post-order', orderController.postOrder);
-  router.get('/api/get-order/:userId', orderController.getOrdersWithUser);
-  router.get('/api/get-detail-order-by-user/:orderId', orderController.getDetailOrderWithUser);
+  router.post('/api/post-order', auth.authToken, orderController.postOrder);
+  router.get('/api/get-order/:userId', auth.authToken, orderController.getOrdersWithUser);
+  router.get('/api/get-detail-order-by-user/:orderId', auth.authToken, orderController.getDetailOrderWithUser);
 
   // admin
   router.get('/api/get-all-user', userController.getAllUser);

@@ -1,7 +1,7 @@
 const Product = require("../model/product");
 const User = require("../model/user");
 
-exports.handleGetAllProduct = (limit, page) => {
+exports.handleGetAllProduct = async(limit, page) => {
   return new Promise(async (resolve, reject) => {
     try {
       const products = await Product.find();

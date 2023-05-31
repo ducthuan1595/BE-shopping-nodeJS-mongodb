@@ -46,11 +46,17 @@ exports.getDetailOrderWithUser = async(req, res) => {
 };
 
 exports.getAllOrder = async(req, res) => {
-  const data = await orderService.handleGetAllOrder();
-  if(data) {
-    res.status(data.statusCode).json({ message: data.message, orders: data.orders })
+  const page = req.query.page || 1;
+  const limit = req.query.limit || 20;
+  if(page && limit) {
+    const data = await orderService.handleGetAllOrder(page, limit);
+    if(data) {
+      res.status(data.statusCode).json({ message: data.message, orders: data.result })
+    }else {
+      res.status(500).json({ message: 'Error server'})
+    }
   }else {
-    res.status(500).json({ message: 'Error server'})
+    res.status(404).json({ message: 'Invalid value' });
   }
 };
 

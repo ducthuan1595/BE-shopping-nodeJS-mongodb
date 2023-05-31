@@ -1,5 +1,6 @@
 const nodemailer = require("nodemailer");
 const Product = require('../model/product');
+const Buffer = require('buffer');
 require("dotenv").config();
 
 const transporter = nodemailer.createTransport({
@@ -57,10 +58,11 @@ table {
       const amount = (item?.price * p.quantity)
       .toString()
       .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      const base64 = Buffer.from(item.images[0]).toString('base64');
       return `
         <tr>
           <td>${item.name}</td>
-          <td><img style="height:100px;" src=${item.images[0]} alt=${item.name} /></td>
+          <td><img style="height:100px;" src=${'data:image/jpeg;base64,' + base64} alt=${item.name} /></td>
           <td>${price}</td>
           <td>${p.quantity}</td>
           <td>${amount}</td>

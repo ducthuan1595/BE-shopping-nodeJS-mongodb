@@ -9,11 +9,12 @@ const auth = {
     if(!token) {
       res.status(401).json({ message: 'You are not authentication', errCode: 1 })
     }else {
+      console.log(token);
       jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
         if(err) {
           res.status(403).json({ message: 'Token is invalid', errCode: 1 })
         }else {
-          req.user = data.user;
+          // req.user = data.user;
           next();
         }
       })
@@ -21,7 +22,7 @@ const auth = {
   },
 
   refreshToken: async(req, res, next) => {
-    const token = req.headers['authorization']?.split(' ')[1];
+    const token = req.cookies.refreshToken;
     if(!token) {
       return res.status(401).json({ message: 'You are not authentication'})
     }
@@ -33,22 +34,25 @@ const auth = {
           console.log(err);
           return res.status(403).json({ message: 'Token is invalid'})
         }
+        // console.log(data);
+        const user = {
+          email: data.email,
+          name: data.name,
+          userId: data.userId
+        };
         // remove refresh token in database
         await RefreshToken.findOneAndRemove({
-          refreshToken: isToken[0].refreshToken[0]
+          refreshToken: isToken[0]?.refreshToken[0]
         });
-        const newToken = await createTokens.createToken(data);
-        const newRefreshToken = await createTokens.createRefreshToken(data);
-        const createRefreshToken = new RefreshToken({
-          refreshToken: newRefreshToken
-        });
-        await createRefreshToken.save();
+        res.clearCookie("refreshToken", { path: '/api' });
+        const newToken = createTokens.createToken(user);
+        const newRefreshToken = await createTokens.createRefreshToken(user);
         res.cookie('refreshToken', newRefreshToken, {
           httpOnly: true,
           secure: false,
           sameSite: 'strict'
         });
-        res.status(200).json({ message: 'ok', token: newToken, user: data.user })
+        res.status(200).json({ message: 'ok', token: newToken, user: user })
       })
     }else {
       res.status(403).json({ message: 'Invalid refresh token' })

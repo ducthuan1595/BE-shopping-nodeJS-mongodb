@@ -3,9 +3,9 @@ const RefreshToken = require('../model/refreshToken');
 
 exports.createToken = (data) => {
   const token = jwt.sign(
-    { user: data },
+    {...data},
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: '20s'}
+    { expiresIn: 30}
   );
   return token;
 };
@@ -13,9 +13,9 @@ exports.createToken = (data) => {
 exports.createRefreshToken = async(data) => {
   try{
     const refreshToken = jwt.sign(
-      { user: data },
+      {...data},
       process.env.ACCESS_TOKEN_REFRESH,
-      { expiresIn: '5000s'}
+      { expiresIn: '30d'}
     );
     const saveToken = new RefreshToken({
       refreshToken: refreshToken

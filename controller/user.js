@@ -43,7 +43,7 @@ exports.logout = async(req, res) => {
       res.status(200).json({ message: 'ok', errCode: 0 });
     }
   }catch(err) {
-    res.status(404).json({ message: err })
+    res.status(404).json({ message: 'Something wrong' })
   }
 };
 
