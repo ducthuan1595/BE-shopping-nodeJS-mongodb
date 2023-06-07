@@ -24,7 +24,7 @@ const schema = new mongoose.Schema(
     },
     role: {
       type: Number,
-      required: true,
+      default: 0 ////2=admin/1=advice/0=client
     },
     cart: {
       items: [

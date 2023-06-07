@@ -4,6 +4,7 @@ const productController = require('../controller/product');
 const cartController = require('../controller/cart');
 const orderController = require('../controller/order');
 const adminController = require('../controller/admin');
+const chatController = require('../controller/chat');
 const auth = require('../support/jwt');
 
 const router = express.Router();
@@ -33,6 +34,12 @@ const init = (app) => {
   router.get('/api/get-all-user', userController.getAllUser);
   router.get('/api/get-detail-order/:orderId', orderController.getDetailOrder);
   router.post('/api/admin/login', adminController.login);
+
+  router.post('/api/create-room', chatController.createRoom);
+  router.get('/api/get-room', chatController.getRooms);
+  router.post('/api/send-message', chatController.sendMessage);
+  router.get('/api/get-message/:roomId', chatController.getMessages);
+  router.delete('/api/delete-room/:roomId', chatController.deleteRoom);
 
   return app.use('/', router);
 };

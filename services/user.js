@@ -28,7 +28,7 @@ exports.handleSignup = (email, password, name, phone) => {
         password: pw,
         phone: phone,
         name: name,
-        role: 0, //2=admin/1=advice/0=client
+
       });
       const newUser = await user.save();
       if(newUser) {

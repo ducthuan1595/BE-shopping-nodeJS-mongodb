@@ -1,7 +1,12 @@
 const io = require('socket.io');
 
 function initSocket(server) {
-  const socket = io(server);
+  const socket = io(server, {
+    cors: {
+      origin: '*',
+      methods: ['GET', 'POST']
+    }
+  });
 
   function onConnect(client) {
     console.log('Client connected');
