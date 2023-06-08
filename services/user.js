@@ -65,7 +65,7 @@ exports.handleLogin = (email, password, res, req) => {
             httpOnly: true,
             secure: false,
             path: '/api',
-            sameSite: 'none'
+            sameSite: 'strict'
           })
           // res.removeCookie("refreshToken");
           // console.log(data,);
