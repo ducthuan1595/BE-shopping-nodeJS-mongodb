@@ -9,7 +9,7 @@ const auth = {
     if(!token) {
       res.status(401).json({ message: 'You are not authentication', errCode: 1 })
     }else {
-      console.log(token);
+      // console.log(token);
       jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
         if(err) {
           res.status(403).json({ message: 'Token is invalid', errCode: 1 })

@@ -18,6 +18,7 @@ exports.addProduct = async(req, res) => {
   const longDesc = req.body.longDesc;
   const category = req.body.category;
   const count = req.body.count;
+  const userId = req.body.userId;
   let newArr = [];//handle when only 1 image
   const images = req.files.images;
   if(Array.isArray(images)) {
@@ -27,7 +28,7 @@ exports.addProduct = async(req, res) => {
   }
   const files = newArr?.map(file => file.data);
 
-  if(name && price && shortDesc && longDesc && category && count && files) {
+  if(name && price && shortDesc && longDesc && category && count && files && userId) {
     const value = {
       name,
       price,
@@ -35,7 +36,8 @@ exports.addProduct = async(req, res) => {
       longDesc,
       category,
       count,
-      files
+      files,
+      userId
     };
     const data = await productService.handleAddProduct(value);
     if(data) {
@@ -55,6 +57,8 @@ exports.updateProduct = async(req, res) => {
   const category = req.body.category;
   const count = req.body.count;
   const images = req.files.images;
+  const userId = req.body.userId;
+
   let newArr = [];//handle when only 1 image
   if(Array.isArray(images)) {
     newArr = images;
@@ -63,7 +67,7 @@ exports.updateProduct = async(req, res) => {
   }
   const files = newArr?.map(file => file.data);
 
-  if(productId && name && price && shortDesc && longDesc && category && count && files) {
+  if(productId && name && price && shortDesc && longDesc && category && count && files && userId) {
     const value = {
       productId,
       name,
@@ -72,7 +76,8 @@ exports.updateProduct = async(req, res) => {
       longDesc,
       category,
       count,
-      files
+      files,
+      userId
     };
     const data = await productService.handleUpdateProduct(value);
     if(data) {
@@ -85,8 +90,9 @@ exports.updateProduct = async(req, res) => {
 
 exports.deleteProduct = async(req, res) => {
   const productId = req.params.productId;
+  const userId = req.query.userId;
   if(productId) {
-    const data = await productService.handleDeleteProduct(productId);
+    const data = await productService.handleDeleteProduct(productId, userId);
     if(data) {
       res.status(data.statusCode).json({ message: data.message });
     }

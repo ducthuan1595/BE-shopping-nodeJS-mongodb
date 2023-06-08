@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 const Product = require('../model/product');
-const Buffer = require('buffer');
+const Buffer = require("node:buffer");
 require("dotenv").config();
 
 const transporter = nodemailer.createTransport({
@@ -58,7 +58,7 @@ table {
       const amount = (item?.price * p.quantity)
       .toString()
       .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-      const base64 = Buffer.from(item.images[0]).toString('base64');
+      const base64 = Buffer.Buffer.from(item.images[0]).toString('base64');
       return `
         <tr>
           <td>${item.name}</td>
@@ -99,6 +99,7 @@ const sendMailers = async (order, cb) => {
       subject: `YOUR ORDER INFORMATION `,
       text: "signup",
       html: HTMLContent(order, newArr),
+      attachDataUrls: true
     };
     const info = await transporter.sendMail(options);
     cb(info);

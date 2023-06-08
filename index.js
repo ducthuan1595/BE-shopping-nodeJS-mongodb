@@ -24,7 +24,7 @@ const socketIo = require("socket.io")(server, {
 });
 
 socketIo.on("connection", (socket) => {
-  console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+  // console.log(socket.id); // x8WIv7-mJelg7on_ALbx
   socket.on('send-message', data => {
     socket.broadcast.emit('receiver', data);
   })
