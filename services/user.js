@@ -3,7 +3,6 @@ const RefreshToken = require('../model/refreshToken');
 const createTokens = require('../support/createToken');
 
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 require('dotenv').config()
 
 // const sendMailers = require('../support/nodemailer');

@@ -5,6 +5,8 @@ const cartController = require('../controller/cart');
 const orderController = require('../controller/order');
 const adminController = require('../controller/admin');
 const chatController = require('../controller/chat');
+
+const helpFile = require('../support/file');
 const auth = require('../support/jwt');
 
 const router = express.Router();
@@ -40,6 +42,8 @@ const init = (app) => {
   router.post('/api/send-message', chatController.sendMessage);
   router.get('/api/get-message/:roomId', chatController.getMessages);
   router.delete('/api/delete-room/:roomId', chatController.deleteRoom);
+
+  router.get('/api/image/:imageUrl', helpFile.sendFile);
 
   return app.use('/', router);
 };

@@ -6,11 +6,10 @@ const MongoDBStore = require("connect-mongodb-session")(session);
 const cookieParser = require("cookie-parser");
 const fileUpload = require("express-fileupload");
 const http = require("http");
+const path = require('path');
 require("dotenv").config();
 
 const route = require("./router/init");
-const User = require("./model/user");
-const Room = require("./model/room");
 
 const app = express();
 const port = process.env.PORT_URL;
@@ -36,7 +35,7 @@ app.set("socketio", socketIo);
 //   collection: 'sessions'
 // })
 ///////////////////////
-
+app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

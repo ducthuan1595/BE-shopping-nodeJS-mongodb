@@ -1,34 +1,47 @@
-const productService = require('../services/product');
+const productService = require("../services/product");
 
-exports.getAllProduct = async(req, res) => {
+exports.getAllProduct = async (req, res) => {
   const page = req.query.page || 1;
   const limit = req.query.limit || 8;
   const products = await productService.handleGetAllProduct(limit, page);
-  if(products) {
-    res.status(200).json({ message: 'ok', products: products })
-  }else {
-    res.status(404).json({ message: 'Not found', errCode: -1 })
+  if (products) {
+    res.status(200).json({ message: "ok", products: products });
+  } else {
+    res.status(404).json({ message: "Not found", errCode: -1 });
   }
 };
 
-exports.addProduct = async(req, res) => {
+exports.addProduct = async (req, res) => {
   const name = req.body.name;
-  const price = req.body.price;
+  const price = +req.body.price;
   const shortDesc = req.body.shortDesc;
   const longDesc = req.body.longDesc;
   const category = req.body.category;
-  const count = req.body.count;
+  const count = +req.body.count;
   const userId = req.body.userId;
-  let newArr = [];//handle when only 1 image
+  let newArr = []; //handle when only 1 image
   const images = req.files.images;
-  if(Array.isArray(images)) {
+  if (Array.isArray(images)) {
     newArr = images;
-  }else {
+  } else {
     newArr.push(images);
   }
-  const files = newArr?.map(file => file.data);
+  const files = newArr?.map((file) => file);
 
-  if(name && price && shortDesc && longDesc && category && count && files && userId) {
+  if (typeof price !== "number" && typeof count !== "number") {
+    return res.status(404).json({ message: "Invalid value" });
+  }
+
+  if (
+    name !== "undefined" &&
+    price !== "undefined" &&
+    shortDesc !== 'undefined' &&
+    longDesc !== 'undefined' &&
+    category !== 'undefined' &&
+    count !== 'undefined' &&
+    files.length &&
+    userId !== 'undefined'
+  ) {
     const value = {
       name,
       price,
@@ -37,37 +50,51 @@ exports.addProduct = async(req, res) => {
       category,
       count,
       files,
-      userId
+      userId,
     };
     const data = await productService.handleAddProduct(value);
-    if(data) {
+    if (data) {
       res.status(data.statusCode).json({ message: data.message });
     }
-  }else {
-    res.status(404).json({ message: 'Invalid value' });
+  } else {
+    res.status(404).json({ message: "Invalid value" });
   }
 };
 
-exports.updateProduct = async(req, res) => {
+exports.updateProduct = async (req, res) => {
   const productId = req.body.productId;
   const name = req.body.name;
-  const price = req.body.price;
+  const price = +req.body.price;
   const shortDesc = req.body.shortDesc;
   const longDesc = req.body.longDesc;
   const category = req.body.category;
-  const count = req.body.count;
+  const count = +req.body.count;
   const images = req.files.images;
   const userId = req.body.userId;
 
-  let newArr = [];//handle when only 1 image
-  if(Array.isArray(images)) {
+  if (typeof price !== "number" && typeof count !== "number") {
+    return res.status(404).json({ message: "Invalid value" });
+  }
+
+  let newArr = []; //handle when only 1 image
+  if (Array.isArray(images)) {
     newArr = images;
-  }else {
+  } else {
     newArr.push(images);
   }
-  const files = newArr?.map(file => file.data);
+  const files = newArr?.map((file) => file);
 
-  if(productId && name && price && shortDesc && longDesc && category && count && files && userId) {
+  if (
+    productId !== "undefined" &&
+    name !== "undefined" &&
+    price !== "undefined" &&
+    shortDesc !== 'undefined' &&
+    longDesc !== 'undefined' &&
+    category !== 'undefined' &&
+    count !== 'undefined' &&
+    files.length &&
+    userId !== 'undefined'
+  ) {
     const value = {
       productId,
       name,
@@ -77,39 +104,40 @@ exports.updateProduct = async(req, res) => {
       category,
       count,
       files,
-      userId
+      userId,
     };
     const data = await productService.handleUpdateProduct(value);
-    if(data) {
+    if (data) {
       res.status(data.statusCode).json({ message: data.message });
     }
-  }else {
-    res.status(404).json({ message: 'Invalid value' });
+  } else {
+    res.status(404).json({ message: "Invalid value" });
   }
 };
 
-exports.deleteProduct = async(req, res) => {
+exports.deleteProduct = async (req, res) => {
   const productId = req.params.productId;
   const userId = req.query.userId;
-  if(productId) {
+  if (productId) {
     const data = await productService.handleDeleteProduct(productId, userId);
-    if(data) {
+    if (data) {
       res.status(data.statusCode).json({ message: data.message });
     }
-  }else {
-    res.status(404).json({ message: 'Invalid value' });
+  } else {
+    res.status(404).json({ message: "Invalid value" });
   }
 };
 
-exports.getEditProduct = async(req, res) => {
+exports.getEditProduct = async (req, res) => {
   const productId = req.params.productId;
-  if(productId) {
+  if (productId) {
     const data = await productService.handleGetEditProduct(productId);
-    if(data) {
-      res.status(data.statusCode).json({ message: data.message, product: data.product });
+    if (data) {
+      res
+        .status(data.statusCode)
+        .json({ message: data.message, product: data.product });
     }
-  }else {
-    res.status(404).json({ message: 'Invalid value' });
+  } else {
+    res.status(404).json({ message: "Invalid value" });
   }
-}
-
+};
