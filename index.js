@@ -65,8 +65,6 @@ app.use('/', (req, res) => {
   res.send('Connect successfully to Server!')
 })
 
-// 'mongodb+srv://thuantruong:gMOcUbEFedwxY8RV@cluster0.gl2bqhl.mongodb.net/ecommerce?retryWrites=true&w=majority'
-
 mongoose
   .connect(process.env.ACCESS_URL_MONGODB)
   .then(() => {
