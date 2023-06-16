@@ -5,7 +5,7 @@ const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const cookieParser = require("cookie-parser");
 const fileUpload = require("express-fileupload");
-const http = require("https");
+const http = require("http");
 const path = require('path');
 require("dotenv").config();
 
