@@ -65,7 +65,6 @@ app.use('/', (req, res) => {
   res.send('Connect successfully to Server!')
 })
 
-console.log(process.env.DATABASE_URL);
 mongoose
   .connect(process.env.DATABASE_URL)
   .then(() => {

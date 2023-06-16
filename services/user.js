@@ -60,7 +60,6 @@ exports.handleLogin = (email, password, res, req) => {
           ;
           const token = await createTokens.createToken(data);
           const refreshToken = await createTokens.createRefreshToken(data);
-          console.log(req.secure);
           res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: true,

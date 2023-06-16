@@ -2,7 +2,7 @@ const User = require('../model/user');
 const bcrypt = require('bcrypt');
 const createTokens = require('../support/createToken');
 
-exports.handleLogin = (email, password, res) => {
+exports.handleLogin = (email, password, res, req) => {
   return new Promise(async(resolve, reject) => {
     try{
       const user = await User.findOne({email: email});
@@ -17,6 +17,7 @@ exports.handleLogin = (email, password, res) => {
           };
           const accessToken = await createTokens.createToken(result);
           const refreshToken = await createTokens.createRefreshToken(result);
+          console.log(req.secure);
           res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: true,
