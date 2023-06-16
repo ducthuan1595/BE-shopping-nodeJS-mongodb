@@ -19,9 +19,9 @@ exports.handleLogin = (email, password, res) => {
           const refreshToken = await createTokens.createRefreshToken(result);
           res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
-            secure: false,
+            secure: true,
             path: '/api',
-            sameSite: 'strict'
+            sameSite: req.secure ? 'none' : 'lax'
           })
           resolve({ statusCode: 200, message: 'ok', user: result, accessToken })
         }else{
