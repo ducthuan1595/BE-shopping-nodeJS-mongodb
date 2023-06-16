@@ -60,6 +60,10 @@ app.use(function (req, res, next) {
 
 route(app);
 
+app.use('/', (req, res) => {
+  res.send('Connect successfully to Server!')
+})
+
 // 'mongodb+srv://thuantruong:gMOcUbEFedwxY8RV@cluster0.gl2bqhl.mongodb.net/ecommerce?retryWrites=true&w=majority'
 
 mongoose
