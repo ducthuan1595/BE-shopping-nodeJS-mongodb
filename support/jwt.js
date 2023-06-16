@@ -49,9 +49,10 @@ const auth = {
         const newRefreshToken = await createTokens.createRefreshToken(user);
         res.cookie('refreshToken', newRefreshToken, {
           httpOnly: true,
-          secure: false,
-          sameSite: 'strict'
-        });
+          secure: true,
+          path: '/api',
+          sameSite: req.secure ? 'none' : 'lax'
+        })
         res.status(200).json({ message: 'ok', token: newToken, user: user })
       })
     }else {
