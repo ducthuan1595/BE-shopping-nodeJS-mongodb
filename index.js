@@ -5,7 +5,7 @@ const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const cookieParser = require("cookie-parser");
 const fileUpload = require("express-fileupload");
-const http = require("http");
+const http = require("https");
 const path = require('path');
 require("dotenv").config();
 
@@ -65,8 +65,9 @@ app.use('/', (req, res) => {
   res.send('Connect successfully to Server!')
 })
 
+//mongodb://localhost:27017/sales
 mongoose
-  .connect(process.env.DATABASE_URL)
+  .connect('mongodb://localhost:27017/sales')
   .then(() => {
     server.listen(port, () => {
       console.log(`Server is running on port: ${port}`);
