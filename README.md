@@ -14,3 +14,11 @@ ADDRESS_EMAIL=
 EMAIL_PASSWORD=
 ACCESS_TOKEN_SECRET=
 ACCESS_TOKEN_REFRESH=
+
+## FEATURES
+Display items
+Order products
+CRUD product
+Revenue and product management
+Customer chat support
+...
