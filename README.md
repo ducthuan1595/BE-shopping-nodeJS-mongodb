@@ -14,3 +14,11 @@ ADDRESS_EMAIL=
 EMAIL_PASSWORD=
 ACCESS_TOKEN_SECRET=
 ACCESS_TOKEN_REFRESH=
+
+## FEATURES
+
+- CRUD products with mongodb(mongoose)
+- Customer support with socket.io
+- Admin(manage users and products)
+- hashpassword with library pcrybt
+- Handle Token with JWT
