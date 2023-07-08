@@ -1,24 +1,23 @@
-## Link online
+## Project:  E-ECOMMERCE 
 
-`https://server-shopping.vercel.app/`
+* Assignment 03 (Funix)
 
-## `npm start`
+* Create e-commerce platform is an online marketplace that allows businesses and individuals to sell products online. 
 
-Runs the server in the development
+* Number of members: 01
 
-## `env url`
-
-PORT_URL=
-ACCESS_URL_MONGODB=
-ADDRESS_EMAIL=
-EMAIL_PASSWORD=
-ACCESS_TOKEN_SECRET=
-ACCESS_TOKEN_REFRESH=
+* Technologies:
+- FontEnd: HTML/CSS, ReactJs, Javascript
+- BackEnd: NodeJs, MongoDb(mongoose)
 
 ## FEATURES
-Display items
+Create order
 Order products
 CRUD product
-Revenue and product management
-Customer chat support
+Revenue, product management and orders with Admin page
+Customer chat support with socket.io
 ...
+
+## Link demo
+
+`https://server-shopping.vercel.app/`
