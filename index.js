@@ -67,7 +67,7 @@ app.use('/', (req, res) => {
 
 //mongodb://localhost:27017/sales
 mongoose
-  .connect('mongodb://localhost:27017/sales')
+  .connect(process.env.DATABASE_URL)
   .then(() => {
     server.listen(port, () => {
       console.log(`Server is running on port: ${port}`);
