@@ -11,11 +11,11 @@
 - BackEnd: NodeJs, MongoDb(mongoose)
 
 ## FEATURES
-Create order
-Order products
-CRUD product
-Revenue, product management and orders with Admin page
-Customer chat support with socket.io
+- Create order
+- Order products
+- CRUD product
+- Revenue, product management and orders with Admin page
+- Customer chat support with socket.io
 ...
 
 ## Link demo
