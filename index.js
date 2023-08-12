@@ -6,7 +6,7 @@ const MongoDBStore = require("connect-mongodb-session")(session);
 const cookieParser = require("cookie-parser");
 const fileUpload = require("express-fileupload");
 const http = require("http");
-const path = require('path');
+const path = require("path");
 require("dotenv").config();
 
 const route = require("./router/init");
@@ -21,16 +21,16 @@ const socketIo = require("socket.io")(server, {
     origin: "*",
     methods: ["GET", "POST"],
     transports: ["websocket", "polling"],
-    credentials: true
+    credentials: true,
   },
-  allowEIO3: true
+  allowEIO3: true,
 });
 
 socketIo.on("connection", (socket) => {
   // console.log(socket.id); // x8WIv7-mJelg7on_ALbx
-  socket.on('send-message', data => {
-    socket.broadcast.emit('receiver', data);
-  })
+  socket.on("send-message", (data) => {
+    socket.broadcast.emit("receiver", data);
+  });
 });
 
 app.set("socketio", socketIo);
@@ -39,13 +39,13 @@ app.set("socketio", socketIo);
 //   collection: 'sessions'
 // })
 ///////////////////////
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use("/images", express.static(path.join(__dirname, "images")));
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(fileUpload());
-app.set('trust proxy', 1);
+app.set("trust proxy", 1);
 app.use(function (req, res, next) {
   res.header("Content-Type", "application/json;charset=UTF-8");
   res.header("Access-Control-Allow-Credentials", true);
@@ -65,9 +65,11 @@ app.use(function (req, res, next) {
 
 route(app);
 
-app.use('/', (req, res) => {
-  res.send('Connect successfully to Server!')
-})
+app.use("/", (req, res) => {
+  console.log(req.hostname);
+  res.send("Connect successfully to Server!");
+});
+// src='../data/images/${item.images[0]}'
 
 //mongodb://localhost:27017/sales
 mongoose

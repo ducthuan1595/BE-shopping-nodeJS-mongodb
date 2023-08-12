@@ -1,7 +1,10 @@
 const nodemailer = require("nodemailer");
-const Product = require('../model/product');
+const Product = require("../model/product");
 const Buffer = require("node:buffer");
+const path = require("path");
 require("dotenv").config();
+
+const url = process.env.SERVER_URL;
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -50,27 +53,30 @@ table {
     <th>Quantity</th>
     <th>Total</th>
   </tr>
-    ${items.map(p => {
-      const item = p._doc
-      const price = item?.price
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-      const amount = (item?.price * p.quantity)
-      .toString()
-      .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-      const base64 = Buffer.Buffer.from(item.images[0]).toString('base64');
-      return `
+    ${items
+      .map((p) => {
+        const item = p._doc;
+        const price = item?.price
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        const amount = (item?.price * p.quantity)
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        return `
         <tr>
           <td>${item.name}</td>
-          <td><img style="height:100px;" src=${'data:image/jpeg;base64,' + base64} alt=${item.name} /></td>
+          <td><img style="height:100px;" src='cid:${item.images[0]}' alt=${item.name} /></td>
           <td>${price}</td>
           <td>${p.quantity}</td>
           <td>${amount}</td>
         </tr>
-      `
-    }).join('')}
+      `;
+      })
+      .join("")}
 </table>
-  <div className='bold'>TOTAL: ${order.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}VND</div>
+  <div className='bold'>TOTAL: ${order.amount
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}VND</div>
   <div>Thank you very much for companion with us.</div>
   <div> Good day!  </div>
 </body>
@@ -83,10 +89,10 @@ const sendMailers = async (order, cb) => {
     const product = await Product.find();
     const arrItem = order.items;
     let newArr = [];
-    for(let i = 0; i < arrItem.length; i++) {
-      for(let j = 0; j < product.length; j++) {
+    for (let i = 0; i < arrItem.length; i++) {
+      for (let j = 0; j < product.length; j++) {
         if (arrItem[i].productId.toString() === product[j]._id.toString()) {
-          const newProduct = {...product[j]};
+          const newProduct = { ...product[j] };
           newProduct.quantity = arrItem[i].quantity;
           newArr.push(newProduct);
         }
@@ -98,8 +104,13 @@ const sendMailers = async (order, cb) => {
       to: order.user.email,
       subject: `YOUR ORDER INFORMATION `,
       text: "signup",
+      attachDataUrls: true,
+      attachments: newArr.map((item) => ({
+        filename: item._doc.images[0],
+        path: path.join(__dirname, "..", "data", "images", item._doc.images[0]),
+        cid: item._doc.images[0],
+      })),
       html: HTMLContent(order, newArr),
-      attachDataUrls: true
     };
     const info = await transporter.sendMail(options);
     cb(info);

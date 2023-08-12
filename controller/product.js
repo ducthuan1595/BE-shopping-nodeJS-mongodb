@@ -35,12 +35,12 @@ exports.addProduct = async (req, res) => {
   if (
     name !== "undefined" &&
     price !== "undefined" &&
-    shortDesc !== 'undefined' &&
-    longDesc !== 'undefined' &&
-    category !== 'undefined' &&
-    count !== 'undefined' &&
+    shortDesc !== "undefined" &&
+    longDesc !== "undefined" &&
+    category !== "undefined" &&
+    count !== "undefined" &&
     files.length &&
-    userId !== 'undefined'
+    userId !== "undefined"
   ) {
     const value = {
       name,
@@ -88,12 +88,12 @@ exports.updateProduct = async (req, res) => {
     productId !== "undefined" &&
     name !== "undefined" &&
     price !== "undefined" &&
-    shortDesc !== 'undefined' &&
-    longDesc !== 'undefined' &&
-    category !== 'undefined' &&
-    count !== 'undefined' &&
+    shortDesc !== "undefined" &&
+    longDesc !== "undefined" &&
+    category !== "undefined" &&
+    count !== "undefined" &&
     files.length &&
-    userId !== 'undefined'
+    userId !== "undefined"
   ) {
     const value = {
       productId,
